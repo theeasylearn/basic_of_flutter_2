@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-class ListViewDemo1 extends StatelessWidget {
+class GridViewDemo1 extends StatelessWidget {
   final List<Map<String, String>> countries = [
     { "name": "Germany", "flag": "https://flagpedia.net/data/flags/w580/de.png", "continent": "Europe" },
     { "name": "United Kingdom", "flag": "https://flagpedia.net/data/flags/w580/gb.png", "continent": "Europe" },
@@ -50,33 +50,46 @@ class ListViewDemo1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            title: Text("Example ListView 1"),
-          ),
-          body: Material(
-            child: ListView(
-              padding: EdgeInsets.all(8),
-              children: countries.map((country) {
-                return Card(
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.all(5),
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(country['flag']!),
-                      ),
-                      title: Text(country['name']!),
-                      subtitle: Text(country['continent']!),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Example of grid view"),
+        ),
+        body: Material(
+            child: GridView.builder(
+                itemCount: countries.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 5,
+                    crossAxisSpacing: 5),
+                itemBuilder: (ctx,index){
+                  return Card(
+                    elevation: 10,
+                    child: Column(
+                      children: [
+                        Expanded(flex: 4,child:
+                        Image.network(countries[index]['flag'].toString(),
+                            fit: BoxFit.cover)),
+                        Expanded(
+                            flex: 1,
+                            child: Container(
+                              padding: EdgeInsets.only(left:10,right: 10),
+                              color: Colors.white,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(countries[index]['name'].toString(),
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold
+                                    ),),
+                                  Text(countries[index]['continent'].toString()),
+                                ],
+                              ),
+                            ))
+                      ],
                     ),
-                  ),
-                );
-              }).toList(),),
-          ),
-        )
+                  );
+                })),
+      ),
     );
   }
 }
